@@ -16,7 +16,8 @@ $ALLOWED_ORIGINS = ['https://puntocerodigital.com.mx']; // Cambia '*' por tus do
 // Tiempo en segundos para considerar un usuario como "online"
 define('ONLINE_WINDOW', 30); // 15 segundos
 
-function db() {
+function db()
+{
     static $mysqli = null;
     if ($mysqli === null) {
         $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -29,7 +30,8 @@ function db() {
     return $mysqli;
 }
 
-function cors() {
+function cors()
+{
     global $ALLOWED_ORIGINS;
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
     if (in_array('*', $ALLOWED_ORIGINS) || in_array($origin, $ALLOWED_ORIGINS)) {
@@ -45,27 +47,46 @@ function cors() {
     }
 }
 
-function json_out($data) {
+function json_out($data)
+{
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data);
     exit;
 }
 
-function get_ip() {
-    $keys = ['HTTP_CF_CONNECTING_IP','HTTP_X_FORWARDED_FOR','HTTP_CLIENT_IP','REMOTE_ADDR'];
+function get_ip()
+{
+    $keys = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR'];
     foreach ($keys as $k) {
         if (!empty($_SERVER[$k])) {
             $ip = $_SERVER[$k];
-            if (strpos($ip, ',') !== false) $ip = trim(explode(',', $ip)[0]);
+            if (strpos($ip, ',') !== false)
+                $ip = trim(explode(',', $ip)[0]);
             return $ip;
         }
     }
     return '0.0.0.0';
 }
 
-function ua_device($ua) {
+function ua_device($ua)
+{
     $ua = strtolower($ua);
-    if (strpos($ua, 'mobile') !== false || strpos($ua, 'android') !== false || strpos($ua, 'iphone') !== false) return 'mobile';
-    if (strpos($ua, 'tablet') !== false || strpos($ua, 'ipad') !== false) return 'tablet';
+
+    // 1. Primero buscamos Tablets (iPad, Playbook, etc.)
+    if (strpos($ua, 'tablet') !== false || strpos($ua, 'ipad') !== false || strpos($ua, 'playbook') !== false) {
+        return 'tablet';
+    }
+
+    // 2. Luego buscamos Móviles (iPhone, Android, etc.)
+    if (strpos($ua, 'mobile') !== false || strpos($ua, 'android') !== false || strpos($ua, 'iphone') !== false || strpos($ua, 'ipod') !== false) {
+        return 'mobile';
+    }
+
+    // 3. Detectamos Bots/Robots (Googlebot, Bingbot, etc.) para que sepas si es tráfico real
+    if (strpos($ua, 'bot') !== false || strpos($ua, 'crawl') !== false || strpos($ua, 'slurp') !== false || strpos($ua, 'spider') !== false) {
+        return 'bot';
+    }
+
+    // 4. Si no es nada de lo anterior, asumimos que es PC de escritorio
     return 'desktop';
 }
