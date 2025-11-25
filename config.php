@@ -10,8 +10,11 @@ define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', '1234');
 date_default_timezone_set('America/Mexico_City');
 
-// Sitios permitidos para CORS. Ejemplo: ['https://midominio.com', 'https://otro.com']
-$ALLOWED_ORIGINS = ['https://puntocerodigital.com.mx']; // Cambia '*' por tus dominios en producción.
+$ALLOWED_ORIGINS = [
+    'https://puntocerodigital.com.mx',
+    'http://localhost:3000', // Si usas entorno local
+    'http://localhost'
+];
 
 // Tiempo en segundos para considerar un usuario como "online"
 define('ONLINE_WINDOW', 30); // 15 segundos

@@ -2,12 +2,12 @@
 require_once __DIR__ . '/../config.php';
 session_start();
 if (empty($_SESSION['admin'])) {
-  header("Location: /dashboard/login.php");
+  header("Location: /analytics/dashboard/login.php"); // Asegúrate de que esta ruta sea correcta según tu servidor
   exit;
 }
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
-header("Pragma: no-cache"); // HTTP 1.0
-header("Expires: 0"); // Proxies
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 
 ?><!doctype html>
 <html lang="es">
@@ -17,7 +17,6 @@ header("Expires: 0"); // Proxies
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mini Analytics – Dashboard</title>
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
 
 <body>
@@ -100,26 +99,6 @@ header("Expires: 0"); // Proxies
           <tbody></tbody>
         </table>
       </div>
-      <div class="card" style="grid-column: span 12;">
-        <div class="label">Eventos recientes</div>
-        <input type="text" id="search-events" placeholder="Buscar eventos..."
-          style="margin-bottom:10px; padding:5px; width: 100%;">
-        <table class="table" id="tbl-events">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Site</th>
-              <th>Sesión</th>
-              <th>URL</th>
-              <th>Evento</th>
-              <th>Datos</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="pagination-events" style="margin-top:10px; text-align:center;"></div>
-      </div>
-
     </div>
     <div class="footer">
       Hecho con ❤️ – Mini Analytics (PHP)
@@ -135,8 +114,6 @@ header("Expires: 0"); // Proxies
       window.loadAll && window.loadAll('default', from, to);
     });
   </script>
-  <script src="dashboard.js?v=<?php echo time(); ?>"></script>
-
 </body>
 
 </html>
